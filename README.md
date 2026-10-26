@@ -19,13 +19,16 @@ mas somente o mês selecionado entra na operação.
 
 Testes da leitura e da reimportação: `node --test financeiro.test.js`.
 
-Na reimportação, alterações apenas no nome exibido não criam uma nova cobrança
-sem número: os demais dados precisam corresponder, preservando cada ocorrência.
-Em **Somar novas**, cobranças sem identificação suficiente que possam já existir
-não são adicionadas; aparecem como aviso na conferência e a base salva é mantida.
-É necessário revisar e aceitar esses avisos. Esse modo não atualiza pagamentos
-existentes. Use **Somar e atualizar** para correspondências identificadas ou a
-substituição conferida do mês como administrador para resolver grupos ambíguos.
+O relatório **Conciliação Crédito** (`.xls` exportado como tabela HTML) é
+importado em **Hermanos**. O custo vem da coluna **Valor Net** e entra em
+**Custo informado** e **Resultado previsto**; Valor Net vazio conta como custo
+não informado, e zero conta como custo zero. Meses da Hermanos importados antes
+desta versão não têm custo: importe o relatório do mês novamente para preenchê-lo. Teste: `node --test scanner.test.mjs`.
+
+Cada importação **substitui** o mês da origem escolhida (Base principal ou
+Hermanos) pelo arquivo novo; não há soma com a importação anterior. Os outros
+meses e a outra origem não mudam. A versão anterior fica no histórico e o
+administrador pode restaurá-la. Administrador e operadores podem importar.
 
 ## Apagar todas as importações (administrador)
 
@@ -58,13 +61,8 @@ retroativo marcados como **Sem separação** mantêm o valor combinado na coluna
 correspondente. Diferenças negativas são preservadas. A exportação completa
 inclui os componentes.
 
-Dados salvos antes da atualização não possuem os componentes. Ao reimportar em
-**Somar novas**, a composição ausente é preenchida se os demais dados da cobrança
-coincidirem exatamente, sem alterar faturamento, recebimentos ou componentes já
-informados (inclusive zero). O preenchimento exige conferência e confirmação.
-Se os demais dados mudaram, use **Somar e atualizar**; grupos sem identificação
-suficiente exigem substituição conferida da competência pelo administrador.
-A base Hermanos continua válida e
+Dados salvos antes da atualização não possuem os componentes. Importe o
+relatório do mês novamente para preenchê-los. A base Hermanos continua válida e
 aparece como sem informação de componentes quando seu formato não os contém.
 
 Testes: `node --test financeiro.test.js limpeza.test.mjs componentes.test.js`.

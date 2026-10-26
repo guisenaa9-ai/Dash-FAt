@@ -71,6 +71,21 @@ test('Hermanos detailed import keeps its original mapping', () => {
   assert.equal(row.nameField, 'Cliente');
   assert.equal(row.billed, 20000);
   assert.equal(row.due, '2026-10-20');
+  assert.equal(row.cost, null);
+});
+
+test('Hermanos reads Valor Net as cost', () => {
+  const base = {Contrato: 'H-NET', Empresa: 'ALASE', 'Mês/Ano': '10/2026',
+    'Valor da Fatura': '440,46', 'Valor Pago': '449,56'};
+  const rows = parseRows([
+    {...base, 'Valor Net': '171.06'},
+    {...base, 'Valor Net': '0'},
+    {...base, 'Valor Net': ''}
+  ], 'Hermanos');
+  assert.deepEqual(rows.map(row => row.cost), [17106, 0, null]);
+  const total = summary(rows, 'exclude');
+  assert.equal(total.cost, 17106);
+  assert.equal(total.missingCost, 1);
 });
 
 test('old unnumbered imports can be refreshed when only beneficiary metadata changed', () => {

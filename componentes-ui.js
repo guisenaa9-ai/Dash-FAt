@@ -46,7 +46,7 @@ function renderPrimary(container, rows, id, label, period) {
     cards.append(card);
   }
   container.append(cards);
-  if (stats.missing) container.append(node('p', 'Reimporte em Somar novas para preencher componentes ausentes de cobranças com os demais dados iguais. Para alterar valores já informados, use Somar e atualizar. Identificações ambíguas exigem conferência pelo administrador.', 'notice'));
+  if (stats.missing) container.append(node('p', 'Importe novamente o relatório do mês para preencher os componentes ausentes.', 'notice'));
   for (const [field, title] of [['entity', 'Por entidade'], ['operator', 'Por operadora']]) {
     container.append(node('h3', title), table(['Nome', 'Cobranças', label],
       componentGroups(rows, id, field).map(group => [group.name, group.count, money(group.total)])));
