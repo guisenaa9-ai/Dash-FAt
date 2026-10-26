@@ -10,7 +10,7 @@ contrata nem publica um serviço automaticamente.
 O Render precisa receber a aplicação inteira, incluindo as alterações de leitura
 do Excel, novas abas, `componentes.js`, `componentes-ui.js`, `limpeza.mjs`,
 `limpeza-ui.js`, `server-config.mjs` e `render.yaml`. Envie os arquivos atualizados
-para a raiz do repositório `planoaadm2-prog/Dashboard-Faturamento-`, na branch
+para a raiz do repositório `guisenaa9-ai/Dash-FAt`, na branch
 `main`. Só enviar o `render.yaml` não envia as alterações feitas neste ambiente.
 
 Não envie `.data`, bancos SQLite, planilhas, backups ou senhas ao GitHub. O
