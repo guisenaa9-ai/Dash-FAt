@@ -10,6 +10,20 @@ import {
 
 const FORMAT = 'hermanos-resumo-v1';
 
+// O XLSX não decodifica acentos de .xls em HTML (ex.: "M&ecirc;s/Ano", "N&deg Cobrança").
+const MARKS = {
+  acute: '\u0301', grave: '\u0300', circ: '\u0302',
+  tilde: '\u0303', uml: '\u0308', cedil: '\u0327'
+};
+
+const decodeAccents = text => text
+  .replace(
+    /&([A-Za-z])(acute|grave|circ|tilde|uml|cedil);/g,
+    (_, letter, mark) => letter + MARKS[mark]
+  )
+  .replace(/&deg;?/g, '°')
+  .normalize('NFC');
+
 const header = value => key(value)
   .replace(/\s*\/\s*/g, '/')
   .replace(/\s+/g, ' ');
@@ -212,9 +226,11 @@ export function scanWorkbook(
     );
   }
 
+  // raw: relatórios .xls em HTML trazem "440,46"; sem isso o XLSX lê 44046.
   const workbook = XLSX.read(bytes, {
     type: 'buffer',
-    cellDates: true
+    cellDates: true,
+    raw: true
   });
 
   if (!workbook.SheetNames.length) {
@@ -226,7 +242,12 @@ export function scanWorkbook(
   const data = XLSX.utils.sheet_to_json(
     workbook.Sheets[sheet],
     {defval: ''}
-  );
+  ).map(raw => Object.fromEntries(
+    Object.entries(raw).map(([name, value]) => [
+      decodeAccents(name),
+      typeof value === 'string' ? decodeAccents(value) : value
+    ])
+  ));
 
   if (!data.length) {
     throw Error('A primeira aba está vazia');

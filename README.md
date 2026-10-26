@@ -19,6 +19,13 @@ mas somente o mês selecionado entra na operação.
 
 Testes da leitura e da reimportação: `node --test financeiro.test.js`.
 
+O relatório **Conciliação Crédito** (`.xls` exportado como tabela HTML) é
+importado em **Hermanos**. O custo vem da coluna **Valor Net** e entra em
+**Custo informado** e **Resultado previsto**; Valor Net vazio conta como custo
+não informado, e zero conta como custo zero. Meses da Hermanos importados antes
+desta versão não têm custo: reimporte com **Somar e atualizar** (ou substitua o
+mês) para preenchê-lo. Teste: `node --test scanner.test.mjs`.
+
 Na reimportação, alterações apenas no nome exibido não criam uma nova cobrança
 sem número: os demais dados precisam corresponder, preservando cada ocorrência.
 Em **Somar novas**, cobranças sem identificação suficiente que possam já existir
