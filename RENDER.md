@@ -1,5 +1,29 @@
 # Publicar o dashboard no Render
 
+## Plano gratuito (configuração atual do `render.yaml`)
+
+O `render.yaml` usa `plan: free`, sem disco persistente. **O banco é apagado**
+sempre que o serviço reinicia, hiberna (15 minutos sem acesso) ou recebe deploy:
+importações, operadores e histórico somem. O administrador é recriado a cada
+início a partir de `DASHBOARD_ADMIN_USER` e `DASHBOARD_ADMIN_PASSWORD` (mínimo
+12 caracteres), informados no painel do Render ao criar o Blueprint. Opcional:
+`DASHBOARD_ADMIN_NAME`. Use para testar; reimporte os arquivos após cada
+hibernação.
+
+Para manter os dados, mude para `plan: starter` e acrescente ao serviço:
+
+```yaml
+    disk:
+      name: dashboard-data
+      mountPath: /var/data
+      sizeGB: 1
+```
+
+e a variável `DASHBOARD_DATA_DIR=/var/data/dashboard`. As seções abaixo
+descrevem essa configuração paga.
+
+## Plano pago com disco
+
 Esta configuração cria um Web Service Node.js com HTTPS e disco persistente para
 SQLite e arquivos importados. O plano Starter e o disco são pagos; confira os
 valores apresentados pelo Render antes de confirmar. Este repositório não
