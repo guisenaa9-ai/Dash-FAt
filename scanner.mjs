@@ -371,8 +371,7 @@ const mixesFormats = existing.some(
     notes.push(
       'Identificação técnica por nome + entidade + operadora; ' +
       'não é número de contrato. Confira homônimos e mudanças de nomes. ' +
-      'Para relatório completo atualizado, prefira a substituição ' +
-      'conferida do mês pelo administrador.'
+      'Cada importação substitui o mês desta origem.'
     );
 
     notes.push(
