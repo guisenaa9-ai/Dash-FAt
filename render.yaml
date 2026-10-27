@@ -1,6 +1,6 @@
-# Plano gratuito: sem disco persistente. O banco fica no disco temporário e é
-# apagado quando o serviço reinicia, hiberna (15 min sem acesso) ou recebe deploy.
-# Para manter os dados, use plan: starter com o bloco disk (ver RENDER.md).
+# Plano gratuito: sem disco persistente. Com DATABASE_URL (Postgres do Neon), o banco
+# é restaurado ao iniciar e copiado a cada alteração; sem ela, os dados somem quando o
+# serviço reinicia, hiberna (15 min sem acesso) ou recebe deploy. Ver RENDER.md.
 services:
   - type: web
     name: dashboard-faturamento
@@ -24,4 +24,6 @@ services:
       - key: DASHBOARD_ADMIN_USER
         sync: false
       - key: DASHBOARD_ADMIN_PASSWORD
+        sync: false
+      - key: DATABASE_URL
         sync: false
