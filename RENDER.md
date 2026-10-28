@@ -2,13 +2,20 @@
 
 ## Plano gratuito (configuração atual do `render.yaml`)
 
-O `render.yaml` usa `plan: free`, sem disco persistente. **O banco é apagado**
-sempre que o serviço reinicia, hiberna (15 minutos sem acesso) ou recebe deploy:
-importações, operadores e histórico somem. O administrador é recriado a cada
-início a partir de `DASHBOARD_ADMIN_USER` e `DASHBOARD_ADMIN_PASSWORD` (mínimo
-12 caracteres), informados no painel do Render ao criar o Blueprint. Opcional:
-`DASHBOARD_ADMIN_NAME`. Use para testar; reimporte os arquivos após cada
-hibernação.
+O `render.yaml` usa `plan: free`, sem disco persistente. Para não perder os dados
+quando o serviço reinicia, hiberna (15 minutos sem acesso) ou recebe deploy,
+defina `DATABASE_URL` com a connection string de um Postgres gratuito do Neon.
+Ao iniciar, o servidor restaura o banco salvo no Neon (tabela
+`dashboard_snapshot`) e, a cada alteração, envia uma cópia atualizada em até 2
+segundos; ao receber SIGTERM, envia a última cópia antes de sair. Se o Neon
+estiver indisponível na inicialização, o servidor não inicia, para não subir
+vazio e sobrescrever a cópia. Use uma única instância. Sem `DATABASE_URL`,
+importações, operadores e histórico somem a cada reinício.
+
+O primeiro administrador vem de `DASHBOARD_ADMIN_USER` e
+`DASHBOARD_ADMIN_PASSWORD` (mínimo 12 caracteres), informados no painel do
+Render. Opcional: `DASHBOARD_ADMIN_NAME`. Depois que o banco é salvo no Neon,
+essas variáveis só são usadas se não houver nenhum administrador.
 
 Para manter os dados, mude para `plan: starter` e acrescente ao serviço:
 
